@@ -9,8 +9,10 @@ const router = express.Router();
 router.get('/',(req, res, next)=>{
     // console.log('shop.js',adminData.products);
     // res.sendFile(path.join(rootDir,'views','shop.html'));
+
+    const products = adminData.products;
     //for pug
-    res.render('shop');
+    res.render('shop',{prods:products, pageTitle: 'Shop',path: '/'});
 });
 
 module.exports= router;
