@@ -7,8 +7,10 @@ const router = express.Router();
 
 
 router.get('/',(req, res, next)=>{
-    console.log('shop.js',adminData.products);
-    res.sendFile(path.join(rootDir,'views','shop.html'));
+    // console.log('shop.js',adminData.products);
+    // res.sendFile(path.join(rootDir,'views','shop.html'));
+    //for pug
+    res.render('shop');
 });
 
 module.exports= router;

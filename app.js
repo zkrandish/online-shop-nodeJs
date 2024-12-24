@@ -4,6 +4,11 @@ const bodyParser= require('body-parser');
 
 const app = express();
 
+//we want to compile with the template engine pug
+app.set('view engine','pug');
+//where to find te views
+app.set('views','views');
+
 const adminData= require('./routes/admin');
 const shopRoutes= require('./routes/shop');
 
