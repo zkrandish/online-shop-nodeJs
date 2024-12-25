@@ -5,15 +5,9 @@ const { title } = require('process');
 
 const router = express.Router();
 
-const products= [];
 
 router.get('/add-product',productsController.getAddProduct);
 
-router.post('/add-product',(req, res, next)=>{
-    // console.log('product middleware');
-   products.push({title: req.body.title});
-    res.redirect('/');
-});
+router.post('/add-product',productsController.postAddProduct);
 
-exports.routes= router;
-exports.products= products;
+module.exports = router;
