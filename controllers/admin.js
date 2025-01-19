@@ -54,8 +54,15 @@ exports.getAddProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc= req.body.description;
-    const updatedProduct = new Product( updatedTilte,updatedPrice, updatedDesc,updatedImageUrl, prodId);
-    updatedProduct.save()
+    Product.findById(prodId)
+    .then(product =>{
+      product.title = updatedTilte;
+      product.price = updatedPrice;
+      product.description = updatedDesc;
+      product.imageUrl = updatedImageUrl;
+      return product.save()
+
+    })
     .then(result =>{
       res.redirect('/admin/products');
     })
@@ -63,7 +70,7 @@ exports.getAddProduct = (req, res, next) => {
   };
 
   exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products => {
       res.render('admin/products', {
         prods: products,
