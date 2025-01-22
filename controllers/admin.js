@@ -48,7 +48,7 @@ exports.getAddProduct = (req, res, next) => {
   };
 
   exports.postEditProduct=(req,res,next)=>{
-    const prodId= req.body.productId;
+    const prodId= req.body.productId; 
     const updatedTilte= req.body.title;
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
