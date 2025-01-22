@@ -7,7 +7,8 @@ exports.getAddProduct = (req, res, next) => {
       path: '/admin/add-product',
       editing: false,
       hasError: false,
-      errorMessage: null
+      errorMessage: null,
+      validationErrors: []
     });
   };
   
@@ -29,7 +30,8 @@ exports.getAddProduct = (req, res, next) => {
           price:price,
           description:description
         },
-        errorMessage: errors.array()[0].msg
+        errorMessage: errors.array()[0].msg,
+        validationErrors: errors.array()
       });
 
     }
@@ -63,35 +65,57 @@ exports.getAddProduct = (req, res, next) => {
         editing: editMode,
         product: product,
         hasError: false,
-        errorMessage: null 
+        errorMessage: null,
+        validationErrors: []
       });
     })
     .catch(err => console.log(err));
   };
 
-  exports.postEditProduct=(req,res,next)=>{
-    const prodId= req.body.productId; 
-    const updatedTilte= req.body.title;
+  exports.postEditProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
-    const updatedDesc= req.body.description;
-    Product.findById(prodId)
-    .then(product =>{
-      if(product.userId.toString() !== req.user._id.toString()){
-        return res.redirect('/');
-      }
-      product.title = updatedTilte;
-      product.price = updatedPrice;
-      product.description = updatedDesc;
-      product.imageUrl = updatedImageUrl;
-      return product.save()
-      .then(result =>{
-        res.redirect('/admin/products');
+    const updatedDesc = req.body.description;
+  
+    const errors = validationResult(req);
+  
+    if (!errors.isEmpty()) {
+      return res.status(422).render('admin/edit-product', {
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: true,
+        hasError: true,
+        product: {
+          title: updatedTitle,
+          imageUrl: updatedImageUrl,
+          price: updatedPrice,
+          description: updatedDesc,
+          _id: prodId
+        },
+        errorMessage: errors.array()[0].msg,
+        validationErrors: errors.array()
       });
-    })
-    
-    .catch(err=> console.log(err));
+    }
+  
+    Product.findById(prodId)
+      .then(product => {
+        if (product.userId.toString() !== req.user._id.toString()) {
+          return res.redirect('/');
+        }
+        product.title = updatedTitle;
+        product.price = updatedPrice;
+        product.description = updatedDesc;
+        product.imageUrl = updatedImageUrl;
+        return product.save().then(result => {
+          console.log('UPDATED PRODUCT!');
+          res.redirect('/admin/products');
+        });
+      })
+      .catch(err => console.log(err));
   };
+  
 
   exports.getProducts = (req, res, next) => {
     Product.find({userId: req.user._id})
