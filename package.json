@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "complete node js guide",
   "main": "app.js",
+  "engines": {
+    "node": "20.12.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production MONGO_USER=zkarandish MONGO_PASSWORD=kGDlY2bBPkkh3BUR MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_51QmEr0HjIaRTtJKZO9cxaGiKeP8YKzyDrXWDHpJWRafVHjhNHrjlagK30xn4hOTBUB6HpDkrC6LjAy7Rj0VxBYM000bA5S9L4a node app.js",
@@ -29,6 +32,7 @@
     "helmet": "^8.0.0",
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.5",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "nodemailer-sendgrid-transport": "^0.2.0",
