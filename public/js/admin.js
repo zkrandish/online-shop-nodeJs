@@ -1,23 +1,34 @@
-const deleteProduct = (btn) =>{
-   const prodId= btn.parentNode.querySelector('[name=productId]').value;
-   const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
+document.addEventListener("DOMContentLoaded", () => {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
 
-   const productElement = btn.closest('article');
+    deleteButtons.forEach((button) => {
+        button.addEventListener("click", async (event) => {
+            const btn = event.target;
+            const prodId = btn.dataset.productid;
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
-   fetch('/admin/product/'+ prodId,{
-    method: 'DELETE',
-    headers: {
-        'csrf-token':csrf
-    }
-   })
-   .then(result=>{
-    return result.json();
-   })
-   .then(data=>{
-    console.log(data);
-    productElement.parentNode.removeChild(productElement);
-   })
-   .catch(err=>{
-    console.log(err);
-   })
-};
+            console.log("Deleting product:", prodId); // Debugging
+
+            try {
+                const response = await fetch(`/admin/product/${prodId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "csrf-token": csrfToken,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok) {
+                    btn.closest(".product-item").remove(); // Remove product from UI
+                } else {
+                    alert(data.message || "Deleting product failed.");
+                }
+            } catch (error) {
+                console.error("Error deleting product:", error);
+            }
+        });
+    });
+});

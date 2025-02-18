@@ -1,7 +1,9 @@
 const fileHelper = require('../util/file');
 const {validationResult} = require('express-validator');
 const Product = require('../models/product');
-const product = require('../models/product');
+const path = require('path');
+const fs = require('fs');
+
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -36,6 +38,7 @@ exports.getAddProduct = (req, res, next) => {
       });
       
     }
+    const imageUrl = image.path;
     const errors = validationResult(req);
     if(!errors.isEmpty()){
        return res.status(422).render('admin/edit-product', {
@@ -53,7 +56,7 @@ exports.getAddProduct = (req, res, next) => {
         validationErrors: errors.array()
       });
     }
-    const imageUrl = image.path;
+   
     const product = new Product({title: title, price:price, description: description, imageUrl:imageUrl, userId: req.user});
     product
       .save()
@@ -185,21 +188,41 @@ exports.getAddProduct = (req, res, next) => {
    
   };
 
-  exports.deleteProduct=(req,res,next)=>{
+
+exports.deleteProduct = (req, res, next) => {
     const prodId = req.params.productId;
+
+    console.log("Received delete request for:", prodId);
+
     Product.findById(prodId)
-    .then(product=>{
-      if(!product){
-        return next(new Error('Product not found.'))
-      }
-      fileHelper.deleteFile(product.imageUrl);
-      return Product.deleteOne({_id:prodId, userId: req.user._id})
+    .then(product => {
+        if (!product) {
+            console.log('Product not found:', prodId);
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        console.log('Found product:', product);
+
+        // Check if file exists before trying to delete it
+        const imagePath = path.join(__dirname, '..', product.imageUrl.replace(/\\/g, "/")); // Fix for Windows paths
+
+        fs.access(imagePath, fs.constants.F_OK, (err) => {
+            if (!err) {
+                console.log('Deleting image:', imagePath);
+                fileHelper.deleteFile(imagePath);
+            } else {
+                console.warn('Image file not found, skipping delete:', imagePath);
+            }
+        });
+
+        return Product.deleteOne({ _id: prodId, userId: req.user._id });
     })
-    .then(()=>{
-      console.log('destroyed product');
-      res.status(200).json({message:'Success!'});
+    .then(result => {
+        console.log('Deleted product:', result);
+        res.status(200).json({ message: 'Success!' });
     })
-    .catch(err=>{
-      res.status(500).json({message: 'Deleting product failed.!'});
-    })
-  }
+    .catch(err => {
+        console.error('Error deleting product:', err);
+        res.status(500).json({ message: 'Deleting product failed!' });
+    });
+};
