@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production MONGO_USER=zkarandish MONGO_PASSWORD=kGDlY2bBPkkh3BUR MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_51QmEr0HjIaRTtJKZO9cxaGiKeP8YKzyDrXWDHpJWRafVHjhNHrjlagK30xn4hOTBUB6HpDkrC6LjAy7Rj0VxBYM000bA5S9L4a SENDGRID_API_KEY=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 node app.js",
+    "start": "cross-env NODE_ENV=production node app.js",
     "start-server": "node app.js",
     "start:dev": "cross-env nodemon app.js"
   },
