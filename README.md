@@ -83,25 +83,25 @@ The project follows the MVC (Model–View–Controller) architecture to keep rou
 ## Screenshots
 
 ### Home Page
-![Home Page](sreenshots/home.png)
+![Home Page](home.png)
 
 
 
 ### Product Details
 
-![products](sreenshots/product.png)
+![products](product.png)
 
 ### Shopping Cart
 
-![cart](sreenshots/cart.png)
+![cart](cart.png)
 
 ### Checkout
 
-![checkout](sreenshots/checkout.png)
+![checkout](checkout.png)
 
 ### Orders
 
-![orders](sreenshots/order.png)
+![orders](order.png)
 
 ---
 
