@@ -152,6 +152,14 @@ Through this project I gained hands-on experience with:
 
 ---
 
-## License
-
 This project was created for educational and portfolio purposes.
+
+# Author
+
+**Zahra Karandish**
+
+Software Developer
+
+GitHub: https://github.com/zkrandish
+
+LinkedIn: https://www.linkedin.com/in/zkarandish/
